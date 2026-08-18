@@ -1,0 +1,2 @@
+# Placeholder so the empty Casks directory is tracked.
+# GoReleaser will create Casks/sumup.rb on the first successful release publish.

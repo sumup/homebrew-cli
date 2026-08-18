@@ -1,0 +1,36 @@
+name: Validate cask
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-cask:
+    name: validate-cask
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check Ruby syntax
+        run: |
+          find Casks -name '*.rb' -type f -print0 | xargs -0 -n1 ruby -c
+
+      - name: Tap local repository
+        run: brew tap sumup/cli "$GITHUB_WORKSPACE"
+
+      - name: Check Homebrew can load the tap
+        run: brew readall sumup/cli
+
+      - name: Validate generated recipe structure
+        if: hashFiles('Casks/sumup.rb') != ''
+        run: ruby scripts/validate_recipes.rb
