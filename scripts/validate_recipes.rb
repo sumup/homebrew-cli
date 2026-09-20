@@ -20,7 +20,7 @@ checks = {
   "linux arm64 archive" => cask.match?(/sumup_#\{version\}_linux_arm64\.tar\.gz/),
   "release host" => cask.scan(%r{https://github\.com/sumup/sumup-cli/releases/download/v#\{version\}/}).length == 4,
   "sha256 count" => cask.scan(/^\s+sha256 "[a-f0-9]{64}"$/).length == 4,
-  # Re-add after md/signing: "no quarantine bypass" => !cask.include?("com.apple.quarantine"),
+  "no quarantine bypass" => !cask.include?("com.apple.quarantine"),
 }
 
 failed = checks.reject { |_description, passed| passed }.keys
